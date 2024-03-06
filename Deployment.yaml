@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot-eta-deploy
+  labels:
+    app: chatbot-eta-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: chatbot-eta-app
+  template:
+    metadata:
+      labels:
+        app: chatbot-eta-app
+    spec:
+      containers:
+      - name: chatbot-eta-container
+        image: danish1998/chatbot-eta-app
+        ports:
+        - containerPort: 8086
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatbot-eta-np-service
+  labels:
+    app: chatbot-eta-app
+spec:
+  selector:
+    app: chatbot-eta-app
+
+  type: NodePort
+  ports:
+  - nodePort: 31008    
+    port: 8086
+    targetPort: 8086
